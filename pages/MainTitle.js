@@ -5,11 +5,12 @@ import Title from '../styles/Title.module.css';
 import Link from 'next/link';
 import Image from 'next/image'
 
-import LoginModal from './api/LoginModal.js';
+import LoginModal from './api/LoginModal';
+
 import AlertModal from "./api/AlertModal";
 
 
-const MainTitle = ({ShowAddress}) => {
+const MainTitle = ({Address, SetAddress,ShowAddress,SetShowAddress, setWalletType,isLogin,setIsLogin, web3, caver, onClickKaikas, onMetaMask,CoinAmount,CoinIcon }) => {
     const Name = "3PM";
     const [LoginOn, setLoginOn] = useState(false);
     const [AlertOn, setAlertOn] = useState(false);
@@ -26,6 +27,16 @@ const MainTitle = ({ShowAddress}) => {
             <LoginModal
                 show={LoginOn}
                 onHide={() => setLoginOn(false)}
+                onClickKaikas={onClickKaikas}
+                onMetaMask={onMetaMask}
+                web3={web3}
+                caver={caver}
+                isLogin={isLogin}
+                setIsLogin={setIsLogin}
+                setWalletType={setWalletType}
+                Address={Address}
+                SetAddress={SetAddress}
+                SetShowAddress={SetShowAddress}
             />           
             <AlertModal
                 show={AlertOn}
@@ -39,18 +50,33 @@ const MainTitle = ({ShowAddress}) => {
                     <Navbar.Collapse id="basic-navbar-nav" >
                         <Nav className="ml-auto">
                             <div className={Title.MainMenu}><Link href="/">Home</Link></div>
-                            <div className={Title.MainMenu}><Link href="/NFT/MyNFTData"> MY NFT </Link></div>                            
-                            { /*<div className={Title.MainMenu}><Link href="/NFT/Minting">NFT Minting</Link></div> */}                             
+                            <div className={Title.MainMenu}><Link href="/NFT/MyNFTData"> MY NFT </Link></div>
+                            {/*<div className={Title.MainMenu}><Link href="/NFT/Minting">NFT Minting</Link></div>*/}
                         </Nav>
-                    </Navbar.Collapse>        
-
-
-
+                    </Navbar.Collapse>
+                    {isLogin && (
                     <Nav className="mr-auto">
-                    <Button variant="primary" onClick={()=> { CheckUnlocked(); }} >{ShowAddress}</Button>
-                    </Nav>                    
+                    <div>
+                    <Image
+                        alt="Icon"
+                        width="25%"
+                        height="26%"
+                        src={CoinIcon}
+                        />
+                    </div>&nbsp;
+                    <div style={{textalign:"center"}}>{CoinAmount}</div>
+
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    </Nav>
+                    )
+                    }
+        
+                    <Nav className="mr-auto">
+                        <Button variant="primary" onClick={()=> { CheckUnlocked(); }} >{ShowAddress}</Button>
+                    </Nav>
                 </Navbar>
             </div>
+
 
         </>
     );
