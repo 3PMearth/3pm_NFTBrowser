@@ -1,0 +1,65 @@
+
+.MainBar {
+    color:cornflowerblue;
+    font-size: 50px;
+    font-weight: bold;
+    padding:10px;
+    overflow: hidden;
+    }
+    
+    .MainMenu {
+    float: left;
+    color: dimgray;
+    font-size: 15px;
+    font-weight: bold;
+    padding:7px;
+    text-decoration: none;
+    text-decoration-line: none;
+    text-decoration-style:none;
+    }
+    
+    .MainMenuRight {
+    float: right;
+    color: dimgray;
+    font-size: 20px;
+    font-weight: bold;
+    padding:5px;
+    }
+    
+    
+    .App {
+    text-align: center;
+    }
+    
+    .movie_container {
+    margin: 0 auto;
+    width: 80%;
+    border: 1px solid #333;
+    padding: 10px 0 30px 0;
+    border-radius: 5px;
+    margin-bottom : 50px;
+    }
+    
+    .form_wrapper{
+    width: 60%;
+    margin: 0 auto;
+    }
+    
+    .title_input {
+    width: 800px;
+    height: 40px;
+    margin: 10px;
+    }
+    
+    .submit_button {
+        width: 200px;
+        height: 50px;
+        font-size: 20px;
+        padding: 20px;
+        border: none;
+        background: indianred;
+        border-radius: 5px;
+        margin-top: 40px;
+        vertical-align: middle;
+    }
+    
