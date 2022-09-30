@@ -1,7 +1,24 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+module.exports = {
   reactStrictMode: true,
-  swcMinify: true,
-}
+  webpack5: true,
+  webpack: (config) => {
+    config.resolve.fallback = {
+      crypto: false,
+      fs: false,
+      os: false,
+      //path: false,
+      //http: false,
+      //https: false,
+      //stream: false,
+      //os: false,
+      //constants: false,
+      //path: false,
+      //tty: false,
+      //zlib: false,
+    };
 
-module.exports = nextConfig
+    return config;
+  },
+
+};
