@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import kip17Abi from "../../components/kip17Abi";
 import Mystyles from "../../styles/mynft.module.css";
+import axios from "axios";
 
 const MyNFTData = ({ Address, walletType, web3, caver, newKip17addr, isLogin }) => {
   const [nftlist, setNftlist] = useState([]);
@@ -26,10 +27,15 @@ const MyNFTData = ({ Address, walletType, web3, caver, newKip17addr, isLogin }) 
 
     }
 
+    setNftlist([]);
+    setShowlist([]);
+    setGameNFTlist([]);
     if (walletType == "klay") {
       KlaytnNFT();
     }
-
+    else {
+      ethereumPolygonNFT();
+    }
   }, []);
 
   const SettingGameNFT = (isOK) => {
@@ -38,6 +44,84 @@ const MyNFTData = ({ Address, walletType, web3, caver, newKip17addr, isLogin }) 
       setShowlist(GameNFTlist);
     else
       setShowlist(nftlist);
+  }
+
+  const ethereumPolygonNFT = async () => {
+    //https://polygon-mainnet.public.blastapi.io //폴리곤 노드
+    //https://polygon-rpc.com                    //폴리곤 노드
+    //https://eth-mainnet.public.blastapi.io     // 이더리움 노드
+    //https://rpc.ankr.com/eth                   // 이더리움 노드 
+
+    //오픈씨 컨트랙트 주소를 통해서 내가 배포한 NFT가 있는지 체크
+    //moralis API 에 있는 transction 로그를 이용해 NFT를 가지고 오는 방식    
+    const chainId = await web3.eth.getChainId();
+    const url = "";
+    if (chainId == 137)  // polygon
+      url = "https://deep-index.moralis.io/api/v2/" + Address + "/nft?chain=polygon&format=decimal";
+    else if (chainId == 80001) // polygon mumbai
+      url = "https://deep-index.moralis.io/api/v2/" + Address + "/nft?chain=mumbai&format=decimal";
+    else if (chainId == 1) //eth 
+      url = "https://deep-index.moralis.io/api/v2/" + Address + "/nft?chain=eth&format=decimal";
+    else if (chainId == 3) //eth ropsten
+      url = "https://deep-index.moralis.io/api/v2/" + Address + "/nft?chain=ropsten&format=decimal";
+    else if (chainId == 4) //eth Rinkeby
+      url = "https://deep-index.moralis.io/api/v2/" + Address + "/nft?chain=rinkeby&format=decimal";
+
+    const api_Key = process.env.NEXT_PUBLIC_MORALIS_API_KEY;
+    axios.get(url,
+      {
+        headers: {
+          "X-API-KEY": api_Key,
+          "Content-Type": "application/json",
+          "accept": "application/json"
+        }
+      })
+      .then(async function (response) {
+        const resultData = JSON.stringify(response['data']['result']);
+
+        for (var i = 0; i < response.data.result.length; i++) {
+          var user = response.data.result[i];
+          console.log("resultData : " + JSON.stringify(user));
+
+          const NftContract = user.token_address;
+          const name = user.name;
+          const symbol = user.symbol;
+          const tokenId = user.token_id;
+          const tokenURI = user.token_uri;
+
+          const JsonName = "";
+          const JsonDescription = "";
+          const JsonURL = "";
+          const FireBaseDB = false;
+
+          const URL = user.token_uri.substring(0, 7);
+            const GetJson = await fetch(tokenURI);
+            const jsonFile = await GetJson.json();
+
+            JsonName = jsonFile.name;
+            JsonDescription = jsonFile.description;
+            if (!JsonDescription) {
+              JsonDescription = jsonFile.bio;
+            }
+
+            JsonURL = jsonFile.image;
+            if (!JsonURL) {
+              JsonURL = jsonFile.image_url;
+            }
+
+          setNftlist((prevState) => {
+            return [...prevState, { NftContract, name, symbol, tokenId, JsonURL, JsonName, JsonDescription, FireBaseDB }];
+          });
+
+          setShowlist((prevState) => {
+            return [...prevState, { NftContract, name, symbol, tokenId, JsonURL, JsonName, JsonDescription, FireBaseDB }];
+          });
+        }
+      })
+      .catch(function (error) {
+        // 에러인 경우 실행
+        console.log("error : " + error);
+      })
   }
 
   const KlaytnNFT = async () => {
@@ -110,6 +194,7 @@ const MyNFTData = ({ Address, walletType, web3, caver, newKip17addr, isLogin }) 
       console.log("Contract : " + con[0]);
       let tokenOwner = await tokenContract.methods.ownerOf(tokenId).call();
 
+      console.log("jsontokenOwner : " + tokenOwner.toLowerCase() + "  Address : " + Address);
       //카이카스는 받아오는 TokenID값이 소문자로 나옴
       //https://forum.klaytn.foundation/t/wallet-address-uppercase-lowercase/1297
       //해당 포럼에서 LowerCase를 사용하라고 함
@@ -117,11 +202,13 @@ const MyNFTData = ({ Address, walletType, web3, caver, newKip17addr, isLogin }) 
         continue;
 
       let tokenURI = await tokenContract.methods.tokenURI(tokenId).call();
+      FireBaseDB = false;
+      console.log("tokenURI : " + tokenURI);
 
       const URL = tokenURI.substring(0, 7);
       if (URL == "ipfs://") {
         const MetaDataJson = tokenURI.replace("ipfs://", "https://gateway.pinata.cloud/ipfs/");
-        console.log("Meta ipfs : " + MetaDataJson);
+
         const GetJson = await fetch(MetaDataJson);
 
         const jsonFile = await GetJson.json();
@@ -145,7 +232,6 @@ const MyNFTData = ({ Address, walletType, web3, caver, newKip17addr, isLogin }) 
           JsonDescription = jsonFile.description;
           const Image = jsonFile.image;
           JsonURL = Image.replace("ipfs://", "https://gateway.pinata.cloud/ipfs/");
-          //FireBaseNFTData(name, symbol, tokenId, JsonURL, JsonName, JsonDescription);
         }
         else {
           const GetJson = await fetch(tokenURI);
@@ -158,6 +244,10 @@ const MyNFTData = ({ Address, walletType, web3, caver, newKip17addr, isLogin }) 
 
       }
 
+      setNftlist((prevState) => {
+        return [...prevState, { NftContract, name, symbol, tokenId, JsonURL, JsonName, JsonDescription, FireBaseDB }];
+      });
+
       setShowlist((prevState) => {
         return [...prevState, { NftContract, name, symbol, tokenId, JsonURL, JsonName, JsonDescription, FireBaseDB }];
       });
@@ -166,7 +256,7 @@ const MyNFTData = ({ Address, walletType, web3, caver, newKip17addr, isLogin }) 
 
   return (
     <>
-      <div>
+          <div>
         {Showlist.map((token) => {
           if (token != null) {
             return (
