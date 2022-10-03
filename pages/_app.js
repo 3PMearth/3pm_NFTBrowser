@@ -6,6 +6,7 @@ import React, { useState, useEffect } from 'react';
 
 import Caver from "caver-js";
 import Web3 from "web3";
+import { publicRuntimeConfig } from '../next.config';
 
 function MyApp({ Component, pageProps }) {
   const [newKip17addr, setNewKip17Addr] = useState("0x1d9b3155DACF64E8A6aFC6B0f236eE222C53cEae");
@@ -58,7 +59,7 @@ function MyApp({ Component, pageProps }) {
       window.sessionStorage.setItem('ID', selectedId);     
 
       const Coin = await caver.klay.getBalance(selectedId);
-      const balance = caver.utils.convertFromPeb(caver.utils.hexToNumberString(Coin));
+      const balance = caver.utils.convertFromPeb(Coin);
       SetCoinAmount(balance);
       
 
