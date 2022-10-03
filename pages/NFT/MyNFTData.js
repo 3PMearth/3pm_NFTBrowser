@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import kip17Abi from "../../components/kip17Abi";
 import Mystyles from "../../styles/mynft.module.css";
+import Caver from "caver-js";
 import axios from "axios";
+import NFTModal from '../api/NftModal';
 
 const MyNFTData = ({ Address, walletType, web3, caver, newKip17addr, isLogin }) => {
   const [nftlist, setNftlist] = useState([]);
@@ -95,6 +97,22 @@ const MyNFTData = ({ Address, walletType, web3, caver, newKip17addr, isLogin }) 
           const FireBaseDB = false;
 
           const URL = user.token_uri.substring(0, 7);
+          if (URL == "ipfs://") {
+            //FireBaseNFTData(name, symbol, tokenId, JsonURL, JsonName, JsonDescription);
+            const NFTItem = FireBaseInit.collection("NFT_ITEM");
+
+            NFTItem.doc(JsonName).get().then((doc) => {
+              if (doc.exists) {
+                console.log("파이어베이스 이제 들어옴");
+
+                FireBaseDB = true;
+                setGameNFTlist((prevState) => {
+                  return [...prevState, { NftContract, name, symbol, tokenId, JsonURL, JsonName, JsonDescription, FireBaseDB }];
+                });
+              }
+            });
+          }
+          else {
             const GetJson = await fetch(tokenURI);
             const jsonFile = await GetJson.json();
 
@@ -108,6 +126,8 @@ const MyNFTData = ({ Address, walletType, web3, caver, newKip17addr, isLogin }) 
             if (!JsonURL) {
               JsonURL = jsonFile.image_url;
             }
+
+          }
 
           setNftlist((prevState) => {
             return [...prevState, { NftContract, name, symbol, tokenId, JsonURL, JsonName, JsonDescription, FireBaseDB }];
@@ -218,6 +238,19 @@ const MyNFTData = ({ Address, walletType, web3, caver, newKip17addr, isLogin }) 
         const Image = jsonFile.image;
         //JsonURL = Image.replace("ipfs://", "https://gateway.ipfs.io/ipfs/");
         JsonURL = Image.replace("ipfs://", "https://gateway.pinata.cloud/ipfs/");
+        //FireBaseNFTData(name, symbol, tokenId, JsonURL, JsonName, JsonDescription);
+        const NFTItem = FireBaseInit.collection("NFT_ITEM");
+
+        NFTItem.doc(JsonName).get().then((doc) => {
+          if (doc.exists) {
+            console.log("파이어베이스 이제 들어옴");
+
+            FireBaseDB = true;
+            setGameNFTlist((prevState) => {
+              return [...prevState, { NftContract, name, symbol, tokenId, JsonURL, JsonName, JsonDescription, FireBaseDB }];
+            });
+          }
+        });
       }
       else {
         const SubURL = tokenURI.substring(0, 12);
@@ -232,6 +265,19 @@ const MyNFTData = ({ Address, walletType, web3, caver, newKip17addr, isLogin }) 
           JsonDescription = jsonFile.description;
           const Image = jsonFile.image;
           JsonURL = Image.replace("ipfs://", "https://gateway.pinata.cloud/ipfs/");
+          //FireBaseNFTData(name, symbol, tokenId, JsonURL, JsonName, JsonDescription);
+          const NFTItem = FireBaseInit.collection("NFT_ITEM");
+
+          NFTItem.doc(JsonName).get().then((doc) => {
+            if (doc.exists) {
+              console.log("파이어베이스 이제 들어옴");
+
+              FireBaseDB = true;
+              setGameNFTlist((prevState) => {
+                return [...prevState, { NftContract, name, symbol, tokenId, JsonURL, JsonName, JsonDescription, FireBaseDB }];
+              });
+            }
+          });
         }
         else {
           const GetJson = await fetch(tokenURI);
@@ -254,9 +300,137 @@ const MyNFTData = ({ Address, walletType, web3, caver, newKip17addr, isLogin }) 
     }
   };
 
+  const sendToken = async (contract, tokenName, tokenId, to) => {
+    console.log("sendToken : " + contract + " Name : " + tokenName + " ID : " + tokenId + "  to: " + to);
+    console.log("myAccount : " + Address);
+
+    if (walletType == "klay") {
+      KlaytnsendToken(contract, tokenName, tokenId, to);
+    }
+    else {
+      ethereumPolygonsendToken(contract, tokenName, tokenId, to);
+    }
+  };
+
+  const KlaytnsendToken = async (contract, tokenName, tokenId, to) => {
+    //클레이튼NFT 전송    
+    const tokenContract = "";
+    tokenContract = await new caver.klay.Contract(kip17Abi, contract, {
+      from: Address,
+    });
+
+    tokenContract.options.address = contract;
+    tokenContract.methods
+      .transferFrom(Address, to, tokenId)
+      .send({
+        from: Address,
+        gas: 0xf4240,
+      })
+      .then(async () => {
+        console.log("Complete");
+        setMyNFT(false);
+
+        //reload
+        setNftlist([]);
+        setShowlist([]);
+        setGameNFTlist([]);
+        KlaytnNFT();
+      })
+      .catch(err => console.log(err));
+  };
+
+  const ethereumPolygonsendToken = async (contract, tokenName, tokenId, to) => {
+    //메타마스크도 주소가 소문자로 들어오기 때문에 변환
+    const Add = String(Address).toLowerCase();
+
+    const chainId = await web3.eth.getChainId();
+    const tokenContract = "";
+
+    if (chainId == 137 || chainId == 80001)  // 폴리곤NFT 전송
+    {
+      tokenContract = await new web3.eth.Contract(erc1155Abi, contract, {
+        from: Add,
+      });
+      tokenContract.options.address = contract;
+      await tokenContract.methods
+        .safeTransferFrom(Add, to, tokenId, 1, 0)
+        .send({
+          from: Add,
+          gasLimit: 1000000,
+          gasPrice: 70000000000,
+          gas: 70000,
+        })
+        .then(async () => {
+          console.log("Complete");
+          setMyNFT(false);
+
+          //reload
+          setNftlist([]);
+          setShowlist([]);
+          setGameNFTlist([]);
+          KlaytnNFT();
+        })
+        .catch(err => console.log(err));
+    }
+    else {
+      //이더리움 NFT 전송
+      tokenContract = await new web3.eth.Contract(erc721Abi, contract, {
+        from: Add,
+      });
+      tokenContract.options.address = contract;
+      await tokenContract.methods
+        .transferFrom(Add, to, tokenId)
+        .send({
+          from: Add,
+          gasLimit: 2000000,
+          gasPrice: 7000000000,
+          maxFeePerGas: 15000000000,
+          gas: 69543,
+        })
+        .then(async () => {
+          console.log("Complete");
+          setMyNFT(false);
+
+          //reload
+          setNftlist([]);
+          setShowlist([]);
+          setGameNFTlist([]);
+          KlaytnNFT();
+        })
+        .catch(err => console.log(err));
+    }
+
+  };
+
+  //NFT 이미지를 누르는 버튼
+  const MyNFTButtonOn = (NftContract, JsonName, tokenId, JsonURL) => {
+    console.log("MYNFT BUTTON : " + NftContract);
+    setMyNFT(true);
+    setNFTDataContract(NftContract);
+    setNFTDataName(JsonName);
+    setNFTDataID(tokenId);
+    setNFTDataURL(JsonURL);
+  }
+
+
   return (
     <>
-          <div>
+      <NFTModal
+        show={MyNFT}
+        onHide={() => setMyNFT(false)}
+        web3={web3}
+        caver={caver}
+        isLogin={isLogin}
+        walletType={walletType}
+        Address={Address}
+        NFTDataName={NFTDataName}
+        NFTDataID={NFTDataID}
+        NFTDataURL={NFTDataURL}
+        NFTDataContract={NFTDataContract}
+        sendToken={sendToken}
+      />
+
+      <div>
         {Showlist.map((token) => {
           if (token != null) {
             return (
@@ -264,7 +438,7 @@ const MyNFTData = ({ Address, walletType, web3, caver, newKip17addr, isLogin }) 
                 <div className="card mb-3">
                   <h3 className="card-header">{token.FireBaseDB ? token.name + " GameNFT" : token.name}</h3>
                   <div className="card-body" style={{ display: "block", margin: "auto", height: "250px", width: "250px" }}>
-                    <img
+                    <img onClick={() => MyNFTButtonOn(token.NftContract, token.JsonName, token.tokenId, token.JsonURL)}
                       //style={{ width: "100%", height: "80%", objectFit: "cover", borderTopLeftRadius: "inherit", borderTopRightRadius: "inherit", margin: "0.1px" }}
                       style={{ width: "100%", height: "100%", objectFit: "contain", }}
                       src={token.JsonURL}
