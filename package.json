@@ -1,7 +1,7 @@
 {
-  "name": "my-app",
-  "version": "0.1.0",
-  "private": true,
+  "name": "3pm-nftbrowser",
+  "version": "0.0.2",
+  "private": false,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -14,10 +14,16 @@
     "bootstrap": "^5.2.2",
     "caver-js": "^1.9.0",
     "caver-js-ext-kas": "^1.12.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.6.1",
+    "eslint-plugin-react": "^7.31.10",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "fs": "^0.0.1-security",
     "ipfs-http-client": "^58.0.1",
     "moralis": "^2.6.0",
     "next": "12.3.1",
+    "nft_browswer_3pm": "^0.0.8",
     "os": "^0.1.2",
     "react": "18.2.0",
     "react-bootstrap": "^2.5.0",
@@ -25,7 +31,25 @@
     "web3": "^1.8.0"
   },
   "devDependencies": {
-    "eslint": "8.24.0",
-    "eslint-config-next": "12.3.1"
-  }
+    "eslint": "^8.24.0",
+    "eslint-config-next": "12.3.1",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.7.1"
+  },
+  "description": "This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).",
+  "main": "next.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://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@github.com/3PMearth/3pm_NFTBrowser.git"
+  },
+  "keywords": [
+    "nft"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/3PMearth/3pm_NFTBrowser/issues"
+  },
+  "homepage": "https://github.com/3PMearth/3pm_NFTBrowser#readme"
 }
