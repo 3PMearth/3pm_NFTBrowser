@@ -1,10 +1,6 @@
-import React, { useState } from 'react';
 import { Modal, Button, Form, Container } from "react-bootstrap";
 
 const AlertModal = ({ show, onHide }) => {
-
-  const [Address, SetAddress] = useState('Login');
-
   return (
     <>
       <Modal

@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form, Container } from "react-bootstrap";
 
-const LoginModal = ({ show, onHide, Address, SetAddress,SetShowAddress, setWalletType,isLogin,setIsLogin, web3, caver, onClickKaikas, onMetaMask}) => {
+const LoginModal = ({ show, onHide, Address, SetAddress,SetShowAddress, setWalletType,isLogin,setIsLogin, onClickKaikas, onMetaMask}) => {
 
   const loginButton = () => {
     if (isLogin) {
@@ -9,7 +8,6 @@ const LoginModal = ({ show, onHide, Address, SetAddress,SetShowAddress, setWalle
       window.sessionStorage.removeItem('ID');
       SetShowAddress("Login");
       setIsLogin(false);
-      console.log("MetaMask LogOut : " + isLogin);
     }
     else
     {      
@@ -17,7 +15,6 @@ const LoginModal = ({ show, onHide, Address, SetAddress,SetShowAddress, setWalle
       setIsLogin(true);
       //모달창 Off
       onHide(false);
-      console.log("MetaMask Login :  "+ isLogin);
     }
   };
   const kaikasLoginButton = (e) => {  
@@ -27,7 +24,6 @@ const LoginModal = ({ show, onHide, Address, SetAddress,SetShowAddress, setWalle
       SetShowAddress("Login");
       
       setIsLogin(false);
-      console.log("KaiKas LogOut : " + isLogin);
     }
     else
     {
@@ -35,7 +31,6 @@ const LoginModal = ({ show, onHide, Address, SetAddress,SetShowAddress, setWalle
       setIsLogin(true);
       //모달창 Off
       onHide(false);
-      console.log("KaiKas Login : " + isLogin);
     }
   };
 

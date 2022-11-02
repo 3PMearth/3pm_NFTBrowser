@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Modal, Button, Form, Container } from "react-bootstrap";
 
-const NftModal = ({ show, onHide,  web3, caver, isLogin, walletType, Address,NFTDataName,NFTDataID,NFTDataURL,NFTDataContract,sendToken}) => {
+const NftModal = ({ show, onHide,  isLogin, walletType, Address,NFTDataName,NFTDataID,NFTDataURL,NFTDataContract,sendToken}) => {
     const [fromAddress, setfromAddress] = useState('');
     const onAddressChange = (e) => {
         setfromAddress(e.target.value);
@@ -18,7 +18,6 @@ const NftModal = ({ show, onHide,  web3, caver, isLogin, walletType, Address,NFT
             return;
         }
 
-        console.log("transfer");
         sendToken(NFTDataContract, NFTDataName,NFTDataID,fromAddress );
     };
   

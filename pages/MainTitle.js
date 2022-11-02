@@ -6,11 +6,10 @@ import Link from 'next/link';
 import Image from 'next/image'
 
 import LoginModal from './api/LoginModal';
-
 import AlertModal from "./api/AlertModal";
 
 
-const MainTitle = ({Address, SetAddress,ShowAddress,SetShowAddress, setWalletType,isLogin,setIsLogin, web3, caver, onClickKaikas, onMetaMask,CoinAmount,CoinIcon }) => {
+const MainTitle = ({Address, SetAddress,ShowAddress,SetShowAddress, setWalletType,isLogin,setIsLogin, Api, onClickKaikas, onMetaMask,CoinAmount,CoinIcon }) => {
     const Name = "3PM";
     const [LoginOn, setLoginOn] = useState(false);
     const [AlertOn, setAlertOn] = useState(false);
@@ -29,8 +28,7 @@ const MainTitle = ({Address, SetAddress,ShowAddress,SetShowAddress, setWalletTyp
                 onHide={() => setLoginOn(false)}
                 onClickKaikas={onClickKaikas}
                 onMetaMask={onMetaMask}
-                web3={web3}
-                caver={caver}
+                Api={Api}
                 isLogin={isLogin}
                 setIsLogin={setIsLogin}
                 setWalletType={setWalletType}
@@ -76,8 +74,6 @@ const MainTitle = ({Address, SetAddress,ShowAddress,SetShowAddress, setWalletTyp
                     </Nav>
                 </Navbar>
             </div>
-
-
         </>
     );
 }
