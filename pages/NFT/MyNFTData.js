@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import kip17Abi from "../../components/kip17Abi";
 import Mystyles from "../../styles/mynft.module.css";
-import Caver from "caver-js";
-import axios from "axios";
 import NFTModal from '../api/NftModal';
 
 const MyNFTData = ({ Address, walletType, Api , isLogin }) => {
