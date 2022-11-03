@@ -52,7 +52,7 @@ const LoginModal = ({ show, onHide, Address, SetAddress,SetShowAddress, setWalle
         <Modal.Body className="modal-dialog-centered">
           <figure className="text-center modal-dialog modal-dialog-centered">
             <h5>
-              지갑을 이용하여 LevelZero에 로그인 합니다.<br />
+              지갑을 이용하여 3pm wallet에 로그인 합니다.<br />
               아래 지갑을 로그인 해주세요.
             </h5>
           </figure>
