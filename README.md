@@ -2,7 +2,7 @@
 <img src ="https://user-images.githubusercontent.com/41898132/199650760-67d26dae-de74-45a1-86b0-22b34944930c.gif">
 </p>
 
-#주요 기능
+# 주요 기능
 
 - MetaMask Login (Ethereum & Polygon)
 - Kaikas Login (Klaytn)
@@ -47,12 +47,12 @@ nft_brower_3pm.walletaddress;
 nft_brower_3pm.coin;
 ```
 
-walletaddress : kaikas 지갑에 로그인이 된 이후 지갑의 주소를 가지고 있는 변수
+walletaddress : kaikas 지갑에 로그인이 된 이후 지갑의 주소를 가지고 있는 변수</br>
 coin : kaikas 지갑에 있는 코인의 수
 </br>
 
 ```kotlin
-await nft_brower_3pm.klaytnNFT(KAS_API_ACCOUNT,KAS_API_KEY, "8217");
+await nft_brower_3pm.klaytnNFT(KAS_API_ACCOUNT,KAS_API_KEY, ChainID);
 ```
 
 KaiKas 지갑안에 있는 NFT를 가져올 수 있다
@@ -62,7 +62,7 @@ KaiKas 지갑안에 있는 NFT를 가져올 수 있다
 |------|---|---|
 |KAS_API_ACCOUNT|string|Kas API 홈페이지에서 Security 페이지에서 가지고 온다|
 |KAS_API_KEY|string|Kas API 홈페이지에서 Security 페이지에서 가지고 온다|
-|8217|string| "8217"은 KaiKas의 메인넷 "1001"은 테스트넷 |
+|ChainID|string| "8217"은 KaiKas의 메인넷 "1001"은 테스트넷 |
 
 KAS_API 경우, [Kas API Console](https://console.klaytnapi.com/ko/security/credential) 에 Security -> Credential 페이지에서 Account와 key 값을 가져올수 있다
 
@@ -93,6 +93,9 @@ await Api.KlaytnsendToken(contract,tokenName,tokenId,to);
 |tokenId|string| Contract 토큰 ID |
 |to|string| 보내는 사람 주소 |
 
+</br>
+</br>
+
 # MetaMask Wallet
 
 ```kotlin
@@ -108,9 +111,9 @@ nft_brower_3pm.coin;
 nft_brower_3pm.chainid;
 ```
 
-walletaddress : MetaMask 지갑에 로그인이 된 이후 지갑의 주소를 가지고 있는 변수
-coin : MetaMask 지갑에 있는 코인의 수
-chainid : MetaMask 지갑의 블록체인 ID
+walletaddress : MetaMask 지갑에 로그인이 된 이후 지갑의 주소를 가지고 있는 변수</br>
+coin : MetaMask 지갑에 있는 코인의 수</br>
+chainid : MetaMask 지갑의 블록체인 ID</br>
 </br>
 
 ```kotlin
