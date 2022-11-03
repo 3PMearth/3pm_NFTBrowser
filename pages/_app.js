@@ -3,7 +3,7 @@ import '../styles/bootstrap.min.css';
 
 import MainTitle from "./MainTitle";
 import React, { useState, useEffect } from 'react';
-import nft_browswer_3pm from "nft_browswer_3pm";
+import nft_browser_3pm from "nft_browser_3pm";
 
 function MyApp({ Component, pageProps }) {
   const [Address, SetAddress] = useState("");
@@ -14,11 +14,10 @@ function MyApp({ Component, pageProps }) {
   const [CoinAmount, SetCoinAmount] = useState(0);
   const [CoinIcon, SetCoinIcon] = useState("/images/ethereum_icon.png");
 
-
   const [Api, SetApi] = useState("");
 
   useEffect(() => {
-    const api = new nft_browswer_3pm();    
+    const api = new nft_browser_3pm();
     api.InitWallet();
     SetApi(api);
     }, []);
