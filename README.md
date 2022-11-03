@@ -47,7 +47,7 @@ nft_brower_3pm.walletaddress;
 nft_brower_3pm.coin;
 ```
 
-walletaddress : kaikas 지갑에 로그인이 된 이후 지갑의 주소를 가지고 있는 변수
+walletaddress : kaikas 지갑에 로그인이 된 이후 지갑의 주소를 가지고 있는 변수</br>
 coin : kaikas 지갑에 있는 코인의 수
 </br>
 
