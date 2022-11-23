@@ -42,7 +42,7 @@
 
 * npm
   ```kotlin
-  npm install npm
+  npm install nft_browser_3pm
   ```
 
 </br>
