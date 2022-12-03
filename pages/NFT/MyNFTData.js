@@ -83,7 +83,6 @@ const MyNFTData = ({ Address, walletType, Api , isLogin }) => {
 
   //NFT 이미지를 누르는 버튼
   const MyNFTButtonOn = (NftContract, JsonName, tokenId, JsonURL) => {
-    console.log("MYNFT BUTTON : " + NftContract);
     setMyNFT(true);
     setNFTDataContract(NftContract);
     setNFTDataName(JsonName);
