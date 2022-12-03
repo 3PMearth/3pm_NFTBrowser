@@ -49,6 +49,7 @@ const MainTitle = ({Address, SetAddress,ShowAddress,SetShowAddress, setWalletTyp
                         <Nav className="ml-auto">
                             <div className={Title.MainMenu}><Link href="/">Home</Link></div>
                             <div className={Title.MainMenu}><Link href="/NFT/MyNFTData"> MY NFT </Link></div>
+                            {/*<div className={Title.MainMenu}><Link href="/NFT/Minting">NFT Minting</Link></div>*/}
                         </Nav>
                     </Navbar.Collapse>
                     {isLogin && (
