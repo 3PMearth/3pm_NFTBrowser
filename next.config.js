@@ -16,6 +16,7 @@ module.exports = {
       path: false,
       tty: false,
       zlib: false,
+      net: false,
     };
 
     return config;
