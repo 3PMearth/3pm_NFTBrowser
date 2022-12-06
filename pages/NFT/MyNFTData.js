@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Mystyles from "../../styles/mynft.module.css";
 import NFTModal from '../api/NftModal';
 import { useRouter } from 'next/router';
+const axios = require("axios");
 
 const MyNFTData = ({ Address, walletType, Api , isLogin }) => {
   const [nftlist, setNftlist] = useState([]);
@@ -42,6 +43,8 @@ const MyNFTData = ({ Address, walletType, Api , isLogin }) => {
     }
     else
     {
+      //ethereumPolygonNFT();
+      
       await Api.ethereumPolygonNFT(process.env.NEXT_PUBLIC_MORALIS_API_KEY)
       .then(res => {
         setShowlist(res);
@@ -49,6 +52,7 @@ const MyNFTData = ({ Address, walletType, Api , isLogin }) => {
             console.log("Token Contract : " + token.Contract + "  Name : " + token.ContractName);
         });  
       });   
+      
     }
   }
   
