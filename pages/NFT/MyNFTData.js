@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Mystyles from "../../styles/mynft.module.css";
 import NFTModal from '../api/NftModal';
+import { useRouter } from 'next/router';
 
 const MyNFTData = ({ Address, walletType, Api , isLogin }) => {
   const [nftlist, setNftlist] = useState([]);
@@ -11,6 +12,8 @@ const MyNFTData = ({ Address, walletType, Api , isLogin }) => {
   const [NFTDataID, setNFTDataID] = useState(false);
   const [NFTDataURL, setNFTDataURL] = useState(false);
   const [NFTDataContract, setNFTDataContract] = useState(false);
+
+  const router = useRouter();
 
   useEffect(() => {
     if (!isLogin) {
@@ -48,14 +51,7 @@ const MyNFTData = ({ Address, walletType, Api , isLogin }) => {
       });   
     }
   }
-
-  const SettingGameNFT = (isOK) => {
-    if (isOK == true)
-      setShowlist(GameNFTlist);
-    else
-      setShowlist(nftlist);
-  }
-
+  
   const sendToken = async (contract, tokenName, tokenId, to) => {
     if (walletType == "klay") {
       await Api.KlaytnsendToken(contract,tokenName,tokenId,to)
